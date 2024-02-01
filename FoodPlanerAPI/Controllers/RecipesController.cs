@@ -9,6 +9,7 @@ using FoodPlannerAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using NuGet.Packaging.Signing;
 
 namespace FoodPlannerAPI.Controllers
 {
@@ -18,15 +19,12 @@ namespace FoodPlannerAPI.Controllers
     public class RecipesController : ControllerBase
     {
         private readonly FoodPlannerDbContext _context;
-        private readonly UserManager<User> _userManager;
 
-        public RecipesController(FoodPlannerDbContext context, UserManager<User> userManager)
+        public RecipesController(FoodPlannerDbContext context)
         {
             _context = context;
-            _userManager = userManager; 
         }
 
-        // GET: api/Recipes
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes()
@@ -34,7 +32,6 @@ namespace FoodPlannerAPI.Controllers
             return await _context.Recipes.ToListAsync();
         }
 
-        // GET: api/Recipes/5
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<Recipe>> GetRecipe(int id)
@@ -49,54 +46,60 @@ namespace FoodPlannerAPI.Controllers
             return recipe;
         }
 
-        // PUT: api/Recipes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRecipe(int id, Recipe recipe)
         {
             if (id != recipe.Id)
             {
-                return BadRequest();
+                ModelState.AddModelError("Id", "The ID in the URL does not match the ID in the request body.");
+                return BadRequest(ModelState);
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(recipe.UserID != userId)
-                return Unauthorized();
+            var recipeFromDb = await _context.Recipes.FindAsync(id);
 
-            _context.Entry(recipe).State = EntityState.Modified;
+            if (recipeFromDb == null)
+            {
+                return NotFound("Recipe not found.");
+            }
+
+            if (recipeFromDb.UserID != userId)
+            {
+                return Unauthorized("You are not authorized to modify this recipe.");
+            }
+
+            _context.Entry(recipeFromDb).CurrentValues.SetValues(recipe);
 
             try
             {
                 await _context.SaveChangesAsync();
+                return NoContent();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!RecipeExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Recipe not found.");
                 }
                 else
                 {
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
-        // POST: api/Recipes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPost]
         public async Task<ActionResult<Recipe>> PostRecipe(Recipe recipe)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             recipe.UserID = userId;
+
             _context.Recipes.Add(recipe);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetRecipe), new { id = recipe.Id }, recipe);
         }
 
-        // DELETE: api/Recipes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecipe(int id)
         {
@@ -122,15 +125,14 @@ namespace FoodPlannerAPI.Controllers
             var user = await _context.Users.FindAsync(userId);
             var recipe = await _context.Recipes.FindAsync(recipeId);
 
-            if(recipe == null || user == null)
-            {
-                return NotFound();
-            }
+            if(user == null)
+                return NotFound("USer not Found");
+
+            if(recipe == null)
+                return NotFound("Recipe not Found");
 
             if(user.FavoriteRecipes == null)
-            {
                 user.FavoriteRecipes = new List<Recipe>();
-            }
 
             user.FavoriteRecipes.Add(recipe);
             await _context.SaveChangesAsync();
@@ -147,8 +149,11 @@ namespace FoodPlannerAPI.Controllers
                 .Include(u => u.FavoriteRecipes)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user == null || user.FavoriteRecipes == null)
-                return NotFound();
+            if (user == null)
+                return NotFound("User not found.");
+
+            if (user.FavoriteRecipes == null)
+                return NotFound("avorite recipe not found.");
 
             return user.FavoriteRecipes.ToList();
         }
@@ -178,6 +183,18 @@ namespace FoodPlannerAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("get-recipes-by-user")]
+        public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipesByUser()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var recipes = await _context.Recipes
+                .Where(r => r.UserID == userId)
+                .ToListAsync();
+
+            return recipes;
         }
         private bool RecipeExists(int id)
         {

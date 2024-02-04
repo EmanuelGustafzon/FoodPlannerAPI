@@ -11,5 +11,9 @@ namespace FoodPlannerAPI.Models
         }
 
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<RecipeSchedule> RecipeSchedules { get; set; }
+
+        public DbSet<ShoppingItem> ShoppingItems { get; set; }
+
     }
 }

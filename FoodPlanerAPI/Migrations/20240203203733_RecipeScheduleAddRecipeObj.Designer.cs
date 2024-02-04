@@ -4,6 +4,7 @@ using FoodPlannerAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodPlannerAPI.Migrations
 {
     [DbContext(typeof(FoodPlannerDbContext))]
-    partial class FoodPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240203203733_RecipeScheduleAddRecipeObj")]
+    partial class RecipeScheduleAddRecipeObj
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,17 +33,23 @@ namespace FoodPlannerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Steps")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("steps")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -63,36 +72,16 @@ namespace FoodPlannerAPI.Migrations
                     b.Property<int?>("RecipeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RecipeId");
 
+                    b.HasIndex("userId");
+
                     b.ToTable("RecipeSchedules");
-                });
-
-            modelBuilder.Entity("FoodPlannerAPI.Models.ShoppingItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Item")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Quantity")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ShoppingItems");
                 });
 
             modelBuilder.Entity("FoodPlannerAPI.Models.User", b =>
@@ -333,6 +322,10 @@ namespace FoodPlannerAPI.Migrations
                         .WithMany()
                         .HasForeignKey("RecipeId");
 
+                    b.HasOne("FoodPlannerAPI.Models.User", null)
+                        .WithMany("RecipePlan")
+                        .HasForeignKey("userId");
+
                     b.Navigation("Recipe");
                 });
 
@@ -390,6 +383,8 @@ namespace FoodPlannerAPI.Migrations
             modelBuilder.Entity("FoodPlannerAPI.Models.User", b =>
                 {
                     b.Navigation("FavoriteRecipes");
+
+                    b.Navigation("RecipePlan");
                 });
 #pragma warning restore 612, 618
         }

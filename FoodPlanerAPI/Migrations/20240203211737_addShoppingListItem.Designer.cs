@@ -4,6 +4,7 @@ using FoodPlannerAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodPlannerAPI.Migrations
 {
     [DbContext(typeof(FoodPlannerDbContext))]
-    partial class FoodPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240203211737_addShoppingListItem")]
+    partial class addShoppingListItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,17 +33,23 @@ namespace FoodPlannerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Steps")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("steps")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -81,13 +90,13 @@ namespace FoodPlannerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Item")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Quantity")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

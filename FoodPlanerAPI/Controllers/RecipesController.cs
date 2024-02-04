@@ -29,7 +29,8 @@ namespace FoodPlannerAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes()
         {
-            return await _context.Recipes.ToListAsync();
+            var recipes = await _context.Recipes.ToListAsync();
+            return recipes;
         }
 
         [HttpGet("{id}")]
@@ -101,6 +102,7 @@ namespace FoodPlannerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteRecipe(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -171,7 +173,7 @@ namespace FoodPlannerAPI.Controllers
                 return NotFound("User not found.");
 
             if (user.FavoriteRecipes == null)
-                return NotFound("avorite recipe not found.");
+                return NotFound("Favorite recipe not found.");
 
             var recipeToRemove = user.FavoriteRecipes.FirstOrDefault(r => r.Id == id);
 

@@ -4,6 +4,7 @@ using FoodPlannerAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodPlannerAPI.Migrations
 {
     [DbContext(typeof(FoodPlannerDbContext))]
-    partial class FoodPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240204173809_tryConvertEnumTOString")]
+    partial class tryConvertEnumTOString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,9 @@ namespace FoodPlannerAPI.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MealType")
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

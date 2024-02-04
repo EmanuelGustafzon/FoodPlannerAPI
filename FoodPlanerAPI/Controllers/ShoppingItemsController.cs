@@ -50,12 +50,14 @@ namespace FoodPlannerAPI.Controllers
 
             if(shoppingItemFromDb == null)
                 return NotFound();
+
             if (shoppingItemFromDb.UserID != userId)
                 return Unauthorized();
+
             if (id != shoppingItem.Id)
                 return BadRequest();
 
-            _context.Entry(shoppingItem).State = EntityState.Modified;
+            _context.Entry(shoppingItemFromDb).CurrentValues.SetValues(shoppingItem);
 
             try
             {

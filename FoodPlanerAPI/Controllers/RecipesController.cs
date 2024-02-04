@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging.Signing;
+using System.Net;
 
 namespace FoodPlannerAPI.Controllers
 {
@@ -27,8 +28,14 @@ namespace FoodPlannerAPI.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes()
+        public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes([FromQuery] int? maxCookTime = null)
         {
+            if (maxCookTime != null)
+            {
+                return await _context.Recipes
+                    .Where(r => r.CookTime <= maxCookTime)
+                    .ToListAsync();
+            }
             var recipes = await _context.Recipes.ToListAsync();
             return recipes;
         }
@@ -102,7 +109,6 @@ namespace FoodPlannerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AllowAnonymous]
         public async Task<IActionResult> DeleteRecipe(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -115,73 +121,6 @@ namespace FoodPlannerAPI.Controllers
                 return Unauthorized();
 
             _context.Recipes.Remove(recipe);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpPost("add-to-favorite/{recipeId}")]
-        public async Task<IActionResult> AddRecipeToFavorite (int recipeId)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.Users.FindAsync(userId);
-            var recipe = await _context.Recipes.FindAsync(recipeId);
-
-            if(user == null)
-                return NotFound("USer not Found");
-
-            if(recipe == null)
-                return NotFound("Recipe not Found");
-
-            if(user.FavoriteRecipes == null)
-                user.FavoriteRecipes = new List<Recipe>();
-
-            user.FavoriteRecipes.Add(recipe);
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [HttpGet("get-favorite-recipes")]
-        public async Task<ActionResult<IEnumerable<Recipe>>> GetFavoriteRecipes()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var user = await _context.Users
-                .Include(u => u.FavoriteRecipes)
-                .FirstOrDefaultAsync(u => u.Id == userId);
-
-            if (user == null)
-                return NotFound("User not found.");
-
-            if (user.FavoriteRecipes == null)
-                return NotFound("avorite recipe not found.");
-
-            return user.FavoriteRecipes.ToList();
-        }
-
-        [HttpDelete("remove-favorite-recipe/{id}")]
-        public async Task<IActionResult> RemoveFavoriteRecipe(int id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var user = await _context.Users
-                .Include(u => u.FavoriteRecipes)
-                .FirstOrDefaultAsync(u => u.Id == userId);
-
-            if (user == null)
-                return NotFound("User not found.");
-
-            if (user.FavoriteRecipes == null)
-                return NotFound("Favorite recipe not found.");
-
-            var recipeToRemove = user.FavoriteRecipes.FirstOrDefault(r => r.Id == id);
-
-            if (recipeToRemove == null)
-                return NotFound("Favorite recipe not found.");
-
-            user.FavoriteRecipes.Remove(recipeToRemove);
-
             await _context.SaveChangesAsync();
 
             return NoContent();

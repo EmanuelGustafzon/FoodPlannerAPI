@@ -1,6 +1,8 @@
 # Recipe planner API
 ## Make it easier for yourself to store your favorite recipes, plan what you will cook and what you need to buy. with Recipe planner you can create and manage recipes. Browse for new recipes. Add recipes in your planner and populate the ingredients from a recipe immigetly to your shopping list.
 
+Built with dotnet web api. C#, Entity Framework, SQL, Azure.
+
 ### Domain name https://foodplannerapi20240204190546.azurewebsites.net/
 
 ### Authetication

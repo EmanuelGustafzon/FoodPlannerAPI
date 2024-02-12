@@ -50,8 +50,9 @@ GET url/api/recipes
 GET url/api/recipes/id
 ```
 ### Post a recipe
-
+```
 POST url/api/recipes
+```
 ``` 
 HEADER
 key: Bearer
@@ -77,12 +78,14 @@ JSON BODY
 ```
 
 ### Update a recipe
+```
 PUT url/api/recipes
-
+```
+```
 HEADER
 key: Bearer
 value: Access Token
-
+```
 JSON BODY
 ``` JSON
 {
@@ -103,38 +106,41 @@ JSON BODY
 }
 ```
 ### Delete a recipe
+```
 DELETE url/api/recipes/id
-
+```
+```
 HEADER
 key: Bearer
 value: Access Token
-
+```
 ### Get recipes by user
-
+```
 GET url/api/recipes/get-recipes-by-user
-
+```
+```
 HEADER
 key: Bearer
 value: Access Token
-
+```
 ## Recipes Schedules, all actions require Authentication with Bearer token in the header
 
 ### Get recipe schedules
-
+```
 GET url/api/recipe-schedules
-
+```
 ### Get recipe schedule by id
-
+```
 GET url/api/recipe-schedules/id
-
+```
 ### Create recipe schedules, query with id to schedule and date.
-
+```
 POST url/api/recipe-schedules?recipeid=id&date=date-time
-
+```
 ### Delete recipe schedule
-
+```
 DELETE url/api/recipe-schedules/id
-
+```
 ## Shopping list, all actions require Authentication with Bearer token in the header
 
 ### Get all shopping items.
@@ -146,12 +152,13 @@ GET url/api/shopping-items
 GET url/api/shopping-items/id
 ```
 ### Post a shopping item
-
+```
 POST url/api/shopping-items?item=eggs&quantaty=2
-
+```
 ### Update a recipe
+```
 PUT url/api/shoppings-items
-
+```
 JSON BODY
 ``` JSON
 {
@@ -162,12 +169,13 @@ JSON BODY
 }
 ```
 ### Delete a recipe
+```
 DELETE url/api/shopping-items/id
-
+```
 ### Populate all ingredients and quantaty from recipe directly to shopping list.
-
+```
 POST url/api/add-ingredients-from-recipe-to-shoppinglist?recipeId=id
-
+```
 
 
 

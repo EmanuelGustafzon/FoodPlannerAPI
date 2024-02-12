@@ -41,9 +41,10 @@ JSON BODY
 ```
 ## Recipes
 
-### Get all recipes
+### Get all recipes, and you can add a query of max cook time.
 ```
 GET url/api/recipes
+Get url/api/recipes?maxCookTime=30
 ```
 ### Get recipes by Id
 ```

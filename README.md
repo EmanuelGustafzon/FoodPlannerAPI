@@ -34,12 +34,10 @@ JSON Body
 POST url/refresh
 ```
 JSON BODY
+```JSON
 {
 "refreshToken": ""
 }
-
-```
-
 ```
 ## Recipes
 

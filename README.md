@@ -3,23 +3,13 @@
 
 Built with dotnet web api. C#, Entity Framework, SQL, Azure.
 
-### Domain name https://foodplannerapi20240204190546.azurewebsites.net/
+### Base Url https://foodplannerapi20240204190546.azurewebsites.net/
 
-### Authetication
-Register Account.
+## Authetication
+
+### Register Account.
 ```
-url/register
-```
-JSON Body
-```
-{
-    "email": "",
-    "password": ""
-}
-```
-Login, you recive a bearer token in the header.
-```
-url/login
+POST url/register
 ```
 JSON Body
 ```
@@ -28,8 +18,105 @@ JSON Body
     "password": ""
 }
 ```
+### Login, you'll receive a bearer token and refresh token in the header and expire date.
 ```
-get all recipes
+POST url/login
 ```
-/api/recipes
+JSON Body
 ```
+{
+    "email": "",
+    "password": ""
+}
+```
+### Refresh token, You recieve the same as when you login in the header
+```
+POST url/refresh
+```
+JSON BODY
+{
+"refreshToken": ""
+}
+
+```
+
+```
+## Recipes
+
+### Get all recipes
+```
+GET url/api/recipes
+```
+### Get recipes by Id
+```
+GET url/api/recipes/id
+```
+### Post a recipe
+
+POST url/api/recipes
+``` 
+HEADER
+key: Bearer
+value: Access Token
+```
+JSON BODY
+```JSON
+{
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "cookTime": 0,
+  "ingredients": [
+    {
+      "ingredient": "string",
+      "amount": "string"
+    }
+  ],
+  "steps": [
+    "string"
+  ]
+}
+```
+
+### Update a recipe
+PUT url/api/recipes
+
+HEADER
+key: Bearer
+value: Access Token
+
+JSON BODY
+``` JSON
+{
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "cookTime": 0,
+  "ingredients": [
+    {
+      "ingredient": "string",
+      "amount": "string"
+    }
+  ],
+  "steps": [
+    "string"
+  ],
+  "userID": "string"
+}
+```
+### Delete a recipe
+DELETE url/api/recipes/id
+
+HEADER
+key: Bearer
+value: Access Token
+
+### Get recipes by user
+
+GET url/api/recipes/get-recipes-by-user
+
+HEADER
+key: Bearer
+value: Access Token
+
+

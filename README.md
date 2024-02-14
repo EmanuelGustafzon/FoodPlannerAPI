@@ -20,7 +20,7 @@ JSON Body
 ```
 ### Login, you'll receive a bearer token, refresh token and expire date.
 ```
-POST url/login
+POST /login
 ```
 JSON Body
 ```
@@ -31,7 +31,7 @@ JSON Body
 ```
 ### Refresh token, You recieve the same response as when you login.
 ```
-POST url/refresh
+POST /refresh
 ```
 JSON BODY
 ```JSON
@@ -39,12 +39,16 @@ JSON BODY
 "refreshToken": ""
 }
 ```
-## How to use the refreshtoken 
+## How to use the access token. 
 In the header add the key Authorisation together with the value; Bearer your-token.
 ``` 
 HEADER
 key: Authorization
 value: Bearer your-token
+```
+### Logout (Authorization required)
+```
+POST /logout
 ```
 
 ## Recipes

@@ -18,7 +18,7 @@ JSON Body
     "password": ""
 }
 ```
-### Login, you'll receive a bearer token and refresh token in the header and expire date.
+### Login, you'll receive a bearer token, refresh token and expire date.
 ```
 POST url/login
 ```
@@ -29,7 +29,7 @@ JSON Body
     "password": ""
 }
 ```
-### Refresh token, You recieve the same as when you login in the header
+### Refresh token, You recieve the same response as when you login.
 ```
 POST url/refresh
 ```
@@ -39,6 +39,14 @@ JSON BODY
 "refreshToken": ""
 }
 ```
+## How to use the refreshtoken 
+In the header add the key Authorisation together with the value; Bearer your-token.
+``` 
+HEADER
+key: Authorization
+value: Bearer your-token
+```
+
 ## Recipes
 
 ### Get all recipes, and you can add a query of max cook time.
@@ -50,15 +58,11 @@ Get url/api/recipes?maxCookTime=30
 ```
 GET url/api/recipes/id
 ```
-### Post a recipe
+### Post a recipe (Authorization required)
 ```
-POST url/api/recipes
+POST /api/recipes
 ```
-``` 
-HEADER
-key: Bearer
-value: Access Token
-```
+
 JSON BODY
 ```JSON
 {
@@ -78,14 +82,9 @@ JSON BODY
 }
 ```
 
-### Update a recipe
+### Update a recipe (Authorization required)
 ```
-PUT url/api/recipes
-```
-```
-HEADER
-key: Bearer
-value: Access Token
+PUT /api/recipes
 ```
 JSON BODY
 ``` JSON
@@ -102,63 +101,52 @@ JSON BODY
   ],
   "steps": [
     "string"
-  ],
-  "userID": "string"
+  ]
 }
 ```
 ### Delete a recipe
 ```
-DELETE url/api/recipes/id
-```
-```
-HEADER
-key: Bearer
-value: Access Token
+DELETE /api/recipes/id (Authorization required)
 ```
 ### Get recipes by user
 ```
-GET url/api/recipes/get-recipes-by-user
+GET url/api/recipes/get-recipes-by-user (Authorization required)
 ```
-```
-HEADER
-key: Bearer
-value: Access Token
-```
-## Recipes Schedules, all actions require Authentication with Bearer token in the header
+## Recipes Schedules, all actions require Authorization.
 
 ### Get recipe schedules
 ```
-GET url/api/recipe-schedules
+GET /api/recipeschedules
 ```
 ### Get recipe schedule by id
 ```
-GET url/api/recipe-schedules/id
+GET /api/recipeschedules/id
 ```
 ### Create recipe schedules, query with id to schedule and date.
 ```
-POST url/api/recipe-schedules?recipeid=id&date=date-time
+POST /api/recipeschedules?recipeid=id&date=date-time
 ```
 ### Delete recipe schedule
 ```
-DELETE url/api/recipe-schedules/id
+DELETE /api/recipe-schedules/id
 ```
-## Shopping list, all actions require Authentication with Bearer token in the header
+## Shopping list, all actions require Authorization.
 
 ### Get all shopping items.
 ```
-GET url/api/shopping-items
+GET /api/shoppingitems
 ```
 ### Get shopping item by Id
 ```
-GET url/api/shopping-items/id
+GET /api/shoppingitems/id
 ```
 ### Post a shopping item
 ```
-POST url/api/shopping-items?item=eggs&quantaty=2
+POST /api/shoppingitems?item=eggs&quantaty=2
 ```
 ### Update a recipe
 ```
-PUT url/api/shoppings-items
+PUT /api/shoppingsitems
 ```
 JSON BODY
 ``` JSON
@@ -171,11 +159,11 @@ JSON BODY
 ```
 ### Delete a recipe
 ```
-DELETE url/api/shopping-items/id
+DELETE /api/shoppingitems/id
 ```
 ### Populate all ingredients and quantaty from recipe directly to shopping list.
 ```
-POST url/api/add-ingredients-from-recipe-to-shoppinglist?recipeId=id
+POST /api/addingredients-from-recipe-to-shoppinglist?recipeId=id
 ```
 
 

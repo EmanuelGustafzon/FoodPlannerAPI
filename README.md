@@ -3,7 +3,7 @@
 
 Built with dotnet web api. C#, Entity Framework, SQL, Azure.
 
-### Base Url https://foodplannerapi20240204190546.azurewebsites.net/
+### Base Url https://foodplannerapi20240204190546.azurewebsites.net/ (currently not live)
 
 ## Authetication
 
